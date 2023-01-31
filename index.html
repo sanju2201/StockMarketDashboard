@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/7d68c97d2f.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="styles.css" />
+    <title>Stock Market Dashboard</title>
+  </head>
+  <body>
+    <main id="container">
+      <!-- /////// Head Start /////// -->
+      <div class="head-section">
+        <span id="arrow-up"><i class="fa-sharp fa-solid fa-arrow-up"></i></span>
+        <h2>STOCK MARKET DASHBOARD</h2>
+        <span id="arrow-down"
+          ><i class="fa-sharp fa-solid fa-arrow-down"></i
+        ></span>
+      </div>
+
+      <!-- /////// Option Menu Start /////// -->
+      <div class="option-menu">
+        <div class="search">
+          <div class="search-bar">
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Search for Symbol"
+            />
+            <button id="search-button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+        <div class="option">
+          <button class="option-button" id="intraday" value="Intraday">
+            INTRADAY
+          </button>
+          <button class="option-button" id="daily" value="Daily">DAILY</button>
+          <button class="option-button" id="weekly" value="Weekly">
+            WEEKLY
+          </button>
+          <button class="option-button" id="monthly" value="Monthly">
+            MONTHLY
+          </button>
+        </div>
+      </div>
+
+      <!-- /////// Watchlist Start /////// -->
+      <div class="watchlist-section">
+        <div class="watchlist-heading">
+          <h3>YOUR WATCHLIST</h3>
+        </div>
+        <div class="watchlist-container" id="watchlist-container">
+          <!-- <ul class="watchlist"> 
+            <li class="list-element symbol">AMZN</li>
+            <li class="list-element price">123.45</li>
+            <li class="list-element time">INTRADAY</li>
+            <li class="list-element close">
+              <i class="fa-solid fa-xmark"></i>
+            </li>
+          </ul>  -->
+        </div>
+      </div>
+    </main>
+    <script src="App.js"></script>
+  </body>
+</html>

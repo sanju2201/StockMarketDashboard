@@ -1,0 +1,241 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@100;400&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#container {
+  min-height: 90vh;
+  width: 425px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: rgb(240, 240, 240);
+  padding: 1rem;
+  margin-top: 30px;
+  border-radius: 1rem;
+  border: 2px solid red;
+}
+
+.head-section {
+  height: 3.5rem;
+  background: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  margin: 1rem, 0;
+  border-radius: 1rem;
+}
+
+.head-section h2 {
+  display: inline;
+  font-size: 1.4rem;
+  letter-spacing: -1px;
+  word-spacing: 3px;
+}
+
+#arrow-up {
+  font-size: 1.5rem;
+  color: rgb(57, 246, 0);
+  margin-right: 0.5rem;
+}
+#arrow-down {
+  font-size: 1.5rem;
+  color: rgb(255, 0, 0);
+  margin-left: 0.5rem;
+}
+
+.option-menu {
+  background: rgb(217, 217, 217);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.search {
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.search-bar {
+  width: 90%;
+  height: 80%;
+  display: grid;
+  grid-template-columns: 4.45fr 0.55fr;
+  gap: 0.5rem;
+}
+
+.search-bar input {
+  border-radius: 1rem;
+  padding: 0 1rem;
+  border: none;
+  background: rgb(156, 155, 155);
+  color: black;
+  font-size: 1.2rem;
+}
+
+.search-bar button {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  border: none;
+  background: rgb(156, 155, 155);
+  cursor: pointer;
+}
+
+.search-bar button i {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: white;
+}
+
+.option-menu .option {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 100%;
+  padding: 0 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.option button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  height: 2.25rem;
+  letter-spacing: -1px;
+  background: rgb(156, 155, 155);
+  border: none;
+  border-radius: 1rem;
+}
+
+.option .option-button:hover {
+  background: white;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px black;
+}
+
+.option-button.active {
+  background: white;
+  box-shadow: 2px 2px 5px black;
+}
+
+.watchlist-section {
+  background: rgb(217, 217, 217);
+  border-radius: 1rem;
+  width: 100%;
+}
+
+.watchlist-heading {
+  height: 2rem;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(163, 163, 163);
+  margin: 0.75rem 3rem;
+  border-radius: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.watchlist-container {
+  height: 18rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  scrollbar-width: none;
+}
+.watchlist-container::-webkit-scrollbar {
+  display: none;
+}
+
+.watchlist-container .watchlist {
+  width: 90%;
+  list-style-type: none;
+  height: 3.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgb(171, 171, 171);
+  margin: 0.5rem 1rem;
+  border-radius: 0.75rem;
+}
+
+.watchlist .symbol {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.6);
+  width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.watchlist .price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  height: 2.75rem;
+  width: 5.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+}
+
+.watchlist .time {
+  background: rgb(222, 222, 222);
+  height: 2rem;
+  width: 5.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 0.9rem;
+}
+
+.watchlist .close {
+  background: red;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.75rem;
+  color: white;
+  font-weight: 900;
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-green {
+  background: rgb(0, 245, 0);
+}
+
+.bg-white {
+  background: white;
+}
