@@ -1,95 +1,4 @@
-/*
-API Parameters
-❚ Required: function
-
-The time series of your choice. In this case, function=TIME_SERIES_INTRADAY
-
-❚ Required: symbol
-
-The name of the equity of your choice. For example: symbol=IBM
-
-❚ Required: interval
-Time interval between two consecutive data points in the time series. The following values are supported: 1min, 5min, 15min, 30min, 60min
-
-❚ Optional: adjusted
-
-By default, adjusted=true and the output time series is adjusted by historical split and dividend events. Set adjusted=false to query raw (as-traded) intraday values.
-
-❚ Optional: outputsize
-
-By default, outputsize=compact. Strings compact and full are accepted with the following specifications: compact returns only the latest 100 data points in the intraday time series; full returns the full-length intraday time series. The "compact" option is recommended if you would like to reduce the data size of each API call.
-
-❚ Optional: datatype
-
-By default, datatype=json. Strings json and csv are accepted with the following specifications: json returns the intraday time series in JSON format; csv returns the time series as a CSV (comma separated value) file.
-
-❚ Required: apikey
-
-Your API key. Claim your free API key here.
-
-key ==> 3KSL9WN0OHTD9PZI
-Examples (click for JSON output)
-https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo */
-
-
-// fetch("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=3KSL9WN0OHTD9PZI")
-// .then((data)=>{
-//     console.log(data);
-// })
-// .catch((srror)=>{
-//     console.log("Error");
-// });
-
-
-// fetch("https://jsonplaceholder.typicode.com/todos/")
-//   .then((res) => res.json())
-//   .then((todoItems) => {
-//     console.log(todoItems);
-//   })
-//   .catch((error) => {
-//     console.log("ERROR IN API CALL", error);
-//   });
-
-
-// fetch("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AMZN&interval=5min&apikey=3KSL9WN0OHTD9PZI")
-//   .then((res) => res.json())
-//   .then((fetchedObj) => {
-//     console.log(fetchedObj);
-//   })
-//   .catch((error) => {
-//     console.log("ERROR IN API CALL", error);
-//   });
-
-
-  const fetchedObj ={
-    "Meta Data": {
-        "1. Information": "Intraday (5min) open, high, low, close prices and volume",
-        "2. Symbol": "IBM",
-        "3. Last Refreshed": "2023-01-30 20:00:00",
-        "4. Interval": "5min",
-        "5. Output Size": "Compact",
-        "6. Time Zone": "US/Eastern"
-    },
-    "Time Series (5min)": {
-        "2023-01-30 20:00:00": {
-            "1. open": "136.3700",
-            "2. high": "135.3700",
-            "3. low": "135.3700",
-            "4. close": "135.3700",
-            "5. volume": "248"
-        },
-        "2023-01-30 19:55:00": {
-            "1. open": "136.3700",
-            "2. high": "135.3900",
-            "3. low": "135.3900",
-            "4. close": "135.3900",
-            "5. volume": "285"
-        }
-    }
-}
-
-
-// console.log(myObj["work"]);
+//Storing Element
 const mainContainer = document.getElementById("container");
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
@@ -99,7 +8,13 @@ const daily = document.getElementById("daily");
 const weekly = document.getElementById("weekly");
 const monthly = document.getElementById("monthly");
 const listContainer = document.getElementById("watchlist-container");
+let closeButton = document.getElementById("close");
+let listItem;
 
+
+// Watchlist to be stored in local Storage
+const myWatchlist = new Map();
+// localStorage.setItem("myList",myWatchlist);
 
 // ///////// Active Button /////////////
 optionButton.forEach((item)=>{
@@ -116,50 +31,71 @@ optionButton.forEach((item)=>{
 })
 };
 
-// //////// Taking Data from Input ///////////
-const myWatchlist = [];
+// Fetching Data
 
 searchButton.addEventListener("click", ()=>{
-// mainContainer.addEventListener("keyup", ()=>{
 let symbol = searchInput.value;
 let type = document.querySelector(".option-button.active").value;
 
 if(symbol && type){
 changeActiveItem();
 
- // here to fetch API based on the symbol and type
-
+fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`)
+  .then((res) => res.json())
+  .then((fetchedObj) => {  
 let fetchSymbol = fetchedObj["Meta Data"]["2. Symbol"];
 let fetchType = fetchedObj["Meta Data"]["1. Information"].split(" ")[0];
 
-let output = fetchedObj["Time Series (5min)"];
+let mainKeys = Object.keys(fetchedObj);
+let output = fetchedObj[mainKeys[1]];
+
 let openPrice = Object.keys(output);
 let currentPrice = output[openPrice[0]]["1. open"];
 let oldPrice = output[openPrice[1]]["1. open"];
- 
-createNewListElement(fetchSymbol, currentPrice, oldPrice, fetchType);
 
-
-searchInput.value = "";
-document.querySelector(".option-button.active").value ="";
-
+createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
+searchInput.value ="";
+symbol= "";
+type = "";
+// console.log("Then Block Running")
+ })
+ .catch((error) => {
+     symbol= "";
+     type = "";
+     searchInput.value = "";
+     console.log("Catch Block Running");
+    // alert("Wrong Symbol Entered");
+  });
 }
 });
 
 
 
-function createNewListElement(symbol, currentPrice, oldPrice, type){
-let listItem = document.createElement("ul");
-listItem.setAttribute("class","watchlist");
-listItem.innerHTML = `<li id="symbol" class="list-element symbol">${symbol}</li>
-            <li id="price" class="list-element price">${currentPrice}</li>
-            <li id="information" class="list-element time">${type}</li>
-            <li id="close" class="list-element close">
-            <i class="fa-solid fa-xmark"></i>
-            </li>`;
+// Function to check for input and if not Present add to watchlist
+function createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType){
+if (myWatchlist.has(`${fetchSymbol}-${fetchType}`)){
+    console.log("aleady present");
+}  else{
+listItem = document.createElement("ul");
+listItem.classList.add(`${fetchSymbol}-${fetchType}`)
+listItem.classList.add("watchlist");
+listItem.setAttribute(`data-${fetchSymbol}-${fetchType}`,"0");
+listItem.id = `${fetchSymbol}-${fetchType}`;
+listItem.setAttribute("onclick","showDetails(this)");
+currentPrice = (Number(currentPrice)).toFixed(2);
 
-listContainer.append(listItem);  
-let priceCheck = document.getElementById("price");
+listItem.innerHTML = `<li id="symbol" class="${fetchSymbol}-${fetchType} symbol">${fetchSymbol}</li>
+            <li  id="price" class="${fetchSymbol}-${fetchType} price">${currentPrice}</li>
+            <li  id="information" class="${fetchSymbol}-${fetchType} time">${fetchType.toUpperCase()}</li>
+            <li  id="close" class="${fetchSymbol}-${fetchType} close" onclick="closeElement(event)">
+            <i class="${fetchSymbol}-${fetchType} fa-solid fa-xmark"></i>
+           </li>`;
+
+listContainer.appendChild(listItem); 
+
+
+let watchlist = document.querySelector(".watchlist:last-child");
+let priceCheck = watchlist.querySelector(".price");
 
 if(oldPrice > currentPrice){
     priceCheck.classList.add("bg-red");
@@ -169,26 +105,139 @@ if(oldPrice > currentPrice){
      priceCheck.classList.add("bg-white");
 }
 
+myWatchlist.set(`${fetchSymbol}-${fetchType}`,getLastFiveDetails(fetchedObj, fetchType));
+// localStorage.setItem("stockList", listContainer.innerHTML);
+}
+
 }
 
 
 
-// listContainer.addEventListener("keydown",()=>{});
+// Fetching last 5 details
+function getLastFiveDetails(fetchedObj ,fetchType){
 
-// listContainer.addEventListener("keyup", (event) => {
-//   if (event.keyCode === 13) {
-//     console.log('Enter key pressed')
-//   }
-// });
+let mainKeys = Object.keys(fetchedObj);
+let output = fetchedObj[mainKeys[1]];
+let dayObject = Object.keys(output);
+
+let returnedMap = new Map();
+for(let i=0;i<5;i++){
+    if(fetchType === "Intraday"){
+    returnedMap.set(dayObject[i].split(" ")[1], output[dayObject[i]]); 
+    } else{
+    returnedMap.set(dayObject[i].split(" ")[0], output[dayObject[i]]); 
+    }
+}
+return returnedMap;
+}
+
+//  Delete Element from the Watchlist
+function closeElement(event){
+    event.stopPropagation();
+
+    let clickedElement = event.target.classList[0];
+    let elementToBeRemoved = listContainer.querySelector(`.${clickedElement}`);
+    let toBeRemoved = document.getElementById(elementToBeRemoved.classList[0]);
+    listContainer.removeChild(toBeRemoved);
+    removeDetails(elementToBeRemoved);
+    myWatchlist.delete(clickedElement);
+
+    // localStorage.setItem("stockList", listContainer.innerHTML); 
+}
+
+// Remoing the Detaied Modal
+function removeDetails(event){
+    // console.log(event)
+    let itemID = event.id;
+     let deleteElement = listContainer.querySelector(`.${itemID}-detail`);
+    //  console.log(deleteElement);
+    listContainer.removeChild(deleteElement);
+    // console.log(listContainer);
+  event.setAttribute(`data-${itemID}`,0);
+}
 
 
-// https://sentry.io/answers/save-arrays-objects-browser-storage/#:~:text=The%20code%20example%20below%20shows,jsonArray%20as%20the%20value%20localStorage.
 
-//     let output = myObj["time"];
-//    Object.keys(output).forEach(key => {
-//   console.log(key, output[key]);
-// });
+function showDetails(event){
+ let itemID = event.id;
+ if(event.getAttribute(`data-${itemID}`) != 0){  
+   removeDetails(event);
+ }
+ else {
+  event.setAttribute(`data-${itemID}`,1);
+ 
+ if(itemID.includes("Intraday")){
+    dateOrTime = "TIME";
+ }
+ else{
+    dateOrTime = "DATE"
+ }
+  let detailedModal = document.createElement("div");
+     detailedModal.className = `${itemID}-detail detailed-model`;
+     detailedModal.innerHTML = `<ul class="detail-list">
+            <li id="date">${dateOrTime}</li>
+            <li id="open">OPEN</li>
+            <li id="high">HIGH</li>
+            <li id="low">LOW</li>
+            <li id="close">CLOSE</li>
+            <li id="volume">VOLUME</li>
+          </ul>`
+     
+    let timeMap = myWatchlist.get(itemID)
+    let mapIterator = timeMap.keys();
 
-listContainer.addEventListener("click",()=>{
-    console.log("You clicked Me");
-})
+    const iterator1 = mapIterator[Symbol.iterator]();
+
+  for (const timeDate of iterator1) {   // variable for Date or Time
+    let rowObject = timeMap.get(timeDate); // main Object from where need to fetch data
+    let open  = giveMeKey("open", rowObject);
+    let high = giveMeKey("high", rowObject);
+    let low = giveMeKey("low", rowObject);
+    let close = giveMeKey("close", rowObject);
+    let volume = giveMeKey("volume", rowObject);
+
+    // console.log(open, high, low, close, volume);
+
+    // Check present string and Return Actual actual Key As per Object
+    function giveMeKey(check, rowObject){
+    let mainKeys = Object.keys(rowObject);
+    for(let key of mainKeys){
+    if(key.includes(check))
+    return key;
+   }
+   }
+
+    let rowDetail = document.createElement("ul");
+     rowDetail.className = `${itemID} detailed-row`;
+     rowDetail.className = "detail-list";
+     rowDetail.innerHTML = 
+            `<li id="date">${timeDate}</li>
+            <li id="open">${(Number(rowObject[open])).toFixed(2)}</li>
+            <li id="high">${(Number(rowObject[high])).toFixed(2)}</li>
+            <li id="low">${(Number(rowObject[low])).toFixed(2)}</li>
+            <li id="close">${(Number(rowObject[close])).toFixed(2)}</li>
+            <li id="volume">${rowObject[volume]}</li>`
+
+    
+       detailedModal.appendChild(rowDetail);    
+}
+ event.after(detailedModal);
+ 
+}
+}
+
+
+/*
+Map Methods
+Method	Description
+new Map()	Creates a new Map object
+set()	Sets the value for a key in a Map
+get()	Gets the value for a key in a Map
+clear()	Removes all the elements from a Map
+delete()	Removes a Map element specified by a key
+has()	Returns true if a key exists in a Map
+forEach()	Invokes a callback for each key/value pair in a Map
+entries()	Returns an iterator object with the [key, value] pairs in a Map
+keys()	Returns an iterator object with the keys in a Map
+values()	Returns an iterator object of the values in a Map
+*/
