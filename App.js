@@ -1,4 +1,8 @@
 //Storing Element
+window.addEventListener("load",()=>{
+  loadWatchlist();
+});
+
 const mainContainer = document.getElementById("container");
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
@@ -16,7 +20,33 @@ let listItem;
 const myWatchlist = new Map();
 // localStorage.setItem("myList",myWatchlist);
 
-const arrayOfWatchlist = [];
+const arrayOfWatchlist = {
+  key : new Map()
+};
+
+
+
+function loadWatchlist(){
+const newMap = new Map(JSON.parse(localStorage.getItem('localList')));
+// console.log(newMap);
+
+  //  let timeMap = myWatchlist.get(itemID)
+let mapIterator = newMap.keys();
+// console.log(mapIterator)
+
+let array = Array.from(mapIterator);
+console.log(array)
+
+if(array.length != 0){
+for (let i in array) { 
+  let symbol = array[i].split("-")[0];
+  let type = array[i].split("-")[1];
+     fetchDetail(symbol ,type); 
+ }
+
+}
+}
+
 
 // Litener for Active Button
 optionButton.forEach((item)=>{
@@ -39,7 +69,6 @@ optionButton.forEach((item)=>{
 // On Clicking Search Button Fetching Data from API
 searchButton.addEventListener("click", ()=>{
 let symbol = searchInput.value.toUpperCase();
-console.log(symbol)
 let type;
 try{
    type = document.querySelector(".option-button.active").value;
@@ -48,6 +77,15 @@ catch(error){
 searchInput.value = "";
 }
 
+if(symbol && type){
+fetchDetail(symbol, type);
+}
+});
+
+
+
+
+function fetchDetail(symbol ,type){
 if(symbol && type){
 changeActiveItem();
 
@@ -63,9 +101,10 @@ let output = fetchedObj[mainKeys[1]];
 let openPrice = Object.keys(output);
 let currentPrice = output[openPrice[0]]["1. open"];
 let oldPrice = output[openPrice[1]]["1. open"];
-
-createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
+console.log("create ke upr")
+ createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
 searchInput.value ="";
+console.log("then Block Running");
  })
  .catch((error) => {
      searchInput.value = "";
@@ -74,11 +113,41 @@ searchInput.value ="";
     
 });
 }
-
 else{
      document.querySelector(".option-button.active").classList.remove("active"); 
 }
-});
+
+}
+
+
+
+
+
+// function loadWatchlist(){
+// const newMap = new Map(JSON.parse(localStorage.getItem('localList')));
+// console.log(newMap);
+
+//   //  let timeMap = myWatchlist.get(itemID)
+//     let mapIterator = newMap.keys();
+// console.log(mapIterator)
+
+// let array = Array.from(mapIterator);
+// console.log(array)
+
+// if(array.length !== 0){
+// for (let i in array) { 
+//   let symbol = array[i].split("-")[0];
+//   let type = array[i].split("-")[1];
+
+
+
+ 
+//    }
+//  }
+// }
+
+
+ 
 
 
 
@@ -118,6 +187,21 @@ if(oldPrice > currentPrice){
 }
 myWatchlist.set(`${fetchSymbol}-${fetchType}`,getLastFiveDetails(fetchedObj, fetchType));
 // localStorage.setItem("stockList", listContainer.innerHTML);
+// let newObj = {
+//  key : `${fetchSymbol}-${fetchType}`
+
+// };
+// arrayOfWatchlist.key = myWatchlist;
+// localStorage.setItem("stockList", JSON.stringify(arrayOfWatchlist));
+// localStorage.setItem("stockList", JSON.stringify(myWatchlist));
+// localStorage.setItem("stockList", myWatchlist);
+// localStorage.setItem("stockList", JSON.stringify(Array.from(map.entries())));
+// localStorage.myMap = JSON.stringify(Array.from(map.entries()));
+// console.log(localStorage.getItem("stockList"))
+// JSON.stringify(arrayOfWatchlist)
+// console.log(arrayOfWatchlist);
+ localStorage.setItem('localList', JSON.stringify([...myWatchlist]));
+  
 }
 }
 
@@ -153,13 +237,24 @@ function closeElement(event){
     event.stopPropagation();
     let clickedElement = event.target.classList[0];
     let elementToBeRemoved = listContainer.querySelector(`.${clickedElement}`);
-    let toBeRemoved = document.getElementById(elementToBeRemoved.classList[0]);
+    let toBeRemoved = document.getElementById(elementToBeRemoved.classList[0]); // ul= watchlist item
     listContainer.removeChild(toBeRemoved);
-    removeDetails(elementToBeRemoved);
+    
+
     myWatchlist.delete(clickedElement);
+     localStorage.setItem('localList', JSON.stringify([...myWatchlist]));
+     removeDetails(elementToBeRemoved);
+    
+    // arrayOfWatchlist.key = myWatchlist;
+    // console.log(arrayOfWatchlist);
+    // localStorage.setItem("stockList", JSON.stringify(arrayOfWatchlist));
+    // localStorage.setItem("stockList", JSON.stringify(myWatchlist));
+    // localStorage.setItem("stockList", JSON.stringify(Array.from(map.entries())));
+    // localStorage.setItem("stockList", myWatchlist);
+    // console.log(localStorage.getItem("stockList").json())
+    //  localStorage.setItem('localList', JSON.stringify([...myWatchlist]));
+
 }
-
-
 
 
 
@@ -169,9 +264,8 @@ function removeDetails(event){
     // console.log(event)
     let itemID = event.id;
      let deleteElement = listContainer.querySelector(`.${itemID}-detail`);
-    //  console.log(deleteElement);
     listContainer.removeChild(deleteElement);
-    // console.log(listContainer);
+    
   event.setAttribute(`data-${itemID}`,0);
 }
 
@@ -244,6 +338,7 @@ function showDetails(event){
 }
  event.after(detailedModal);
 }
+
 }
 
 
