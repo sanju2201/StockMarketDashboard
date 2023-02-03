@@ -85,13 +85,39 @@ fetchDetail(symbol, type);
 
 
 
-function fetchDetail(symbol ,type){
+async function fetchDetail(symbol ,type){
 if(symbol && type){
 changeActiveItem();
 
-fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`)
-  .then((res) => res.json())
-  .then((fetchedObj) => {  
+// fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`)
+//   .then((res) => res.json())
+//   .then((fetchedObj) => {  
+// let fetchSymbol = fetchedObj["Meta Data"]["2. Symbol"];
+// let fetchType = fetchedObj["Meta Data"]["1. Information"].split(" ")[0];
+
+// let mainKeys = Object.keys(fetchedObj);
+// let output = fetchedObj[mainKeys[1]];
+
+// let openPrice = Object.keys(output);
+// let currentPrice = output[openPrice[0]]["1. open"];
+// let oldPrice = output[openPrice[1]]["1. open"];
+// console.log("create ke upr")
+//  createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
+// searchInput.value ="";
+// console.log("then Block Running");
+//  })
+//  .catch((error) => {
+//      searchInput.value = "";
+//      console.log("Catch Block Running");
+//      document.querySelector(".option-button.active").classList.remove("active");
+    
+// });
+
+try{
+  let fetchData = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`);
+  let fetchedObj = await fetchData.json();
+ 
+  console.log(fetchedObj)
 let fetchSymbol = fetchedObj["Meta Data"]["2. Symbol"];
 let fetchType = fetchedObj["Meta Data"]["1. Information"].split(" ")[0];
 
@@ -105,13 +131,18 @@ console.log("create ke upr")
  createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
 searchInput.value ="";
 console.log("then Block Running");
- })
- .catch((error) => {
+
+ }
+ catch(error){
      searchInput.value = "";
      console.log("Catch Block Running");
-     document.querySelector(".option-button.active").classList.remove("active");
-    
-});
+     document.querySelector(".option-button.active").classList.remove("active");   
+};
+
+
+
+
+
 }
 else{
      document.querySelector(".option-button.active").classList.remove("active"); 
