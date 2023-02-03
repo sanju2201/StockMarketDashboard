@@ -89,30 +89,6 @@ async function fetchDetail(symbol ,type){
 if(symbol && type){
 changeActiveItem();
 
-// fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`)
-//   .then((res) => res.json())
-//   .then((fetchedObj) => {  
-// let fetchSymbol = fetchedObj["Meta Data"]["2. Symbol"];
-// let fetchType = fetchedObj["Meta Data"]["1. Information"].split(" ")[0];
-
-// let mainKeys = Object.keys(fetchedObj);
-// let output = fetchedObj[mainKeys[1]];
-
-// let openPrice = Object.keys(output);
-// let currentPrice = output[openPrice[0]]["1. open"];
-// let oldPrice = output[openPrice[1]]["1. open"];
-// console.log("create ke upr")
-//  createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
-// searchInput.value ="";
-// console.log("then Block Running");
-//  })
-//  .catch((error) => {
-//      searchInput.value = "";
-//      console.log("Catch Block Running");
-//      document.querySelector(".option-button.active").classList.remove("active");
-    
-// });
-
 try{
   let fetchData = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`);
   let fetchedObj = await fetchData.json();
@@ -139,49 +115,12 @@ console.log("then Block Running");
      document.querySelector(".option-button.active").classList.remove("active");   
 };
 
-
-
-
-
 }
 else{
      document.querySelector(".option-button.active").classList.remove("active"); 
 }
 
 }
-
-
-
-
-
-// function loadWatchlist(){
-// const newMap = new Map(JSON.parse(localStorage.getItem('localList')));
-// console.log(newMap);
-
-//   //  let timeMap = myWatchlist.get(itemID)
-//     let mapIterator = newMap.keys();
-// console.log(mapIterator)
-
-// let array = Array.from(mapIterator);
-// console.log(array)
-
-// if(array.length !== 0){
-// for (let i in array) { 
-//   let symbol = array[i].split("-")[0];
-//   let type = array[i].split("-")[1];
-
-
-
- 
-//    }
-//  }
-// }
-
-
- 
-
-
-
 
 
 
@@ -217,28 +156,10 @@ if(oldPrice > currentPrice){
      priceCheck.classList.add("bg-white");
 }
 myWatchlist.set(`${fetchSymbol}-${fetchType}`,getLastFiveDetails(fetchedObj, fetchType));
-// localStorage.setItem("stockList", listContainer.innerHTML);
-// let newObj = {
-//  key : `${fetchSymbol}-${fetchType}`
-
-// };
-// arrayOfWatchlist.key = myWatchlist;
-// localStorage.setItem("stockList", JSON.stringify(arrayOfWatchlist));
-// localStorage.setItem("stockList", JSON.stringify(myWatchlist));
-// localStorage.setItem("stockList", myWatchlist);
-// localStorage.setItem("stockList", JSON.stringify(Array.from(map.entries())));
-// localStorage.myMap = JSON.stringify(Array.from(map.entries()));
-// console.log(localStorage.getItem("stockList"))
-// JSON.stringify(arrayOfWatchlist)
-// console.log(arrayOfWatchlist);
  localStorage.setItem('localList', JSON.stringify([...myWatchlist]));
   
 }
 }
-
-
-
-
 
 
 // Fetching last 5 details
@@ -260,9 +181,6 @@ return returnedMap;
 
 
 
-
-
-
 //  Delete Element from the Watchlist
 function closeElement(event){
     event.stopPropagation();
@@ -276,15 +194,6 @@ function closeElement(event){
      localStorage.setItem('localList', JSON.stringify([...myWatchlist]));
      removeDetails(elementToBeRemoved);
     
-    // arrayOfWatchlist.key = myWatchlist;
-    // console.log(arrayOfWatchlist);
-    // localStorage.setItem("stockList", JSON.stringify(arrayOfWatchlist));
-    // localStorage.setItem("stockList", JSON.stringify(myWatchlist));
-    // localStorage.setItem("stockList", JSON.stringify(Array.from(map.entries())));
-    // localStorage.setItem("stockList", myWatchlist);
-    // console.log(localStorage.getItem("stockList").json())
-    //  localStorage.setItem('localList', JSON.stringify([...myWatchlist]));
-
 }
 
 
@@ -387,3 +296,28 @@ entries()	Returns an iterator object with the [key, value] pairs in a Map
 keys()	Returns an iterator object with the keys in a Map
 values()	Returns an iterator object of the values in a Map
 */
+
+
+// fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`)
+//   .then((res) => res.json())
+//   .then((fetchedObj) => {  
+// let fetchSymbol = fetchedObj["Meta Data"]["2. Symbol"];
+// let fetchType = fetchedObj["Meta Data"]["1. Information"].split(" ")[0];
+
+// let mainKeys = Object.keys(fetchedObj);
+// let output = fetchedObj[mainKeys[1]];
+
+// let openPrice = Object.keys(output);
+// let currentPrice = output[openPrice[0]]["1. open"];
+// let oldPrice = output[openPrice[1]]["1. open"];
+// console.log("create ke upr")
+//  createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
+// searchInput.value ="";
+// console.log("then Block Running");
+//  })
+//  .catch((error) => {
+//      searchInput.value = "";
+//      console.log("Catch Block Running");
+//      document.querySelector(".option-button.active").classList.remove("active");
+    
+// });
