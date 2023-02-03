@@ -69,8 +69,8 @@ searchInput.value ="";
      document.querySelector(".option-button.active").classList.remove("active");
     
 });
-
-} 
+}
+ 
 else{
      document.querySelector(".option-button.active").classList.remove("active"); 
 }
