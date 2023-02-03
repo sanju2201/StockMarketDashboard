@@ -12,11 +12,13 @@ let closeButton = document.getElementById("close");
 let listItem;
 
 
-// Watchlist to be stored in local Storage
+// My Map
 const myWatchlist = new Map();
 // localStorage.setItem("myList",myWatchlist);
 
-// ///////// Active Button /////////////
+const arrayOfWatchlist = [];
+
+// Litener for Active Button
 optionButton.forEach((item)=>{
     item.addEventListener("click",()=>{
         changeActiveItem();
@@ -31,8 +33,10 @@ optionButton.forEach((item)=>{
 })
 };
 
-// Fetching Data
 
+
+
+// On Clicking Search Button Fetching Data from API
 searchButton.addEventListener("click", ()=>{
 let symbol = searchInput.value.toUpperCase();
 console.log(symbol)
@@ -70,7 +74,7 @@ searchInput.value ="";
     
 });
 }
- 
+
 else{
      document.querySelector(".option-button.active").classList.remove("active"); 
 }
@@ -78,7 +82,10 @@ else{
 
 
 
-// Function to check for input and if not Present add to watchlist
+
+
+
+// Function to Element add in watchlist
 function createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType){
 if (myWatchlist.has(`${fetchSymbol}-${fetchType}`)){
     console.log("aleady present");
@@ -99,8 +106,6 @@ listItem.innerHTML = `<li id="symbol" class="${fetchSymbol}-${fetchType} symbol"
            </li>`;
 
 listContainer.appendChild(listItem); 
-
-
 let watchlist = document.querySelector(".watchlist:last-child");
 let priceCheck = watchlist.querySelector(".price");
 
@@ -111,18 +116,18 @@ if(oldPrice > currentPrice){
 } else {
      priceCheck.classList.add("bg-white");
 }
-
 myWatchlist.set(`${fetchSymbol}-${fetchType}`,getLastFiveDetails(fetchedObj, fetchType));
 // localStorage.setItem("stockList", listContainer.innerHTML);
 }
-
 }
+
+
+
 
 
 
 // Fetching last 5 details
 function getLastFiveDetails(fetchedObj ,fetchType){
-
 let mainKeys = Object.keys(fetchedObj);
 let output = fetchedObj[mainKeys[1]];
 let dayObject = Object.keys(output);
@@ -138,19 +143,26 @@ for(let i=0;i<5;i++){
 return returnedMap;
 }
 
+
+
+
+
+
 //  Delete Element from the Watchlist
 function closeElement(event){
     event.stopPropagation();
-
     let clickedElement = event.target.classList[0];
     let elementToBeRemoved = listContainer.querySelector(`.${clickedElement}`);
     let toBeRemoved = document.getElementById(elementToBeRemoved.classList[0]);
     listContainer.removeChild(toBeRemoved);
     removeDetails(elementToBeRemoved);
     myWatchlist.delete(clickedElement);
-
-    // localStorage.setItem("stockList", listContainer.innerHTML); 
 }
+
+
+
+
+
 
 // Remoing the Detaied Modal
 function removeDetails(event){
@@ -165,6 +177,9 @@ function removeDetails(event){
 
 
 
+
+
+// Show Detailed Modal
 function showDetails(event){
  let itemID = event.id;
  if(event.getAttribute(`data-${itemID}`) != 0){  
@@ -225,11 +240,9 @@ function showDetails(event){
             <li class="close">${(Number(rowObject[close])).toFixed(2)}</li>
             <li class="volume">${rowObject[volume]}</li>`
 
-    
        detailedModal.appendChild(rowDetail);    
 }
  event.after(detailedModal);
- 
 }
 }
 
