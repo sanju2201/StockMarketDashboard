@@ -34,8 +34,9 @@ optionButton.forEach((item)=>{
 // Fetching Data
 
 searchButton.addEventListener("click", ()=>{
-let symbol = searchInput.value;
+let symbol = searchInput.value.toUpperCase();
 let type = document.querySelector(".option-button.active").value;
+console.log(type)
 
 if(symbol && type){
 changeActiveItem();
@@ -63,9 +64,18 @@ type = "";
      symbol= "";
      type = "";
      searchInput.value = "";
+     document.querySelector(".option-button.active").classList.remove("active");
      console.log("Catch Block Running");
     // alert("Wrong Symbol Entered");
   });
+}
+
+else{
+     symbol= "";
+     type = "";
+     document.querySelector(".option-button.active").classList.remove("active");
+     searchInput.value = "";
+     console.log(searchInput.value);
 }
 });
 
@@ -175,12 +185,12 @@ function showDetails(event){
   let detailedModal = document.createElement("div");
      detailedModal.className = `${itemID}-detail detailed-model`;
      detailedModal.innerHTML = `<ul class="detail-list">
-            <li id="date">${dateOrTime}</li>
-            <li id="open">OPEN</li>
-            <li id="high">HIGH</li>
-            <li id="low">LOW</li>
-            <li id="close">CLOSE</li>
-            <li id="volume">VOLUME</li>
+            <li class="date">${dateOrTime}</li>
+            <li class="open">OPEN</li>
+            <li class="high">HIGH</li>
+            <li class="low">LOW</li>
+            <li class="close">CLOSE</li>
+            <li class="volume">VOLUME</li>
           </ul>`
      
     let timeMap = myWatchlist.get(itemID)
@@ -211,12 +221,12 @@ function showDetails(event){
      rowDetail.className = `${itemID} detailed-row`;
      rowDetail.className = "detail-list";
      rowDetail.innerHTML = 
-            `<li id="date">${timeDate}</li>
-            <li id="open">${(Number(rowObject[open])).toFixed(2)}</li>
-            <li id="high">${(Number(rowObject[high])).toFixed(2)}</li>
-            <li id="low">${(Number(rowObject[low])).toFixed(2)}</li>
-            <li id="close">${(Number(rowObject[close])).toFixed(2)}</li>
-            <li id="volume">${rowObject[volume]}</li>`
+            `<li class="date">${timeDate}</li>
+            <li class="open">${(Number(rowObject[open])).toFixed(2)}</li>
+            <li class="high">${(Number(rowObject[high])).toFixed(2)}</li>
+            <li class="low">${(Number(rowObject[low])).toFixed(2)}</li>
+            <li class="close">${(Number(rowObject[close])).toFixed(2)}</li>
+            <li class="volume">${rowObject[volume]}</li>`
 
     
        detailedModal.appendChild(rowDetail);    
