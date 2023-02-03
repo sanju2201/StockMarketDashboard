@@ -35,8 +35,14 @@ optionButton.forEach((item)=>{
 
 searchButton.addEventListener("click", ()=>{
 let symbol = searchInput.value.toUpperCase();
-let type = document.querySelector(".option-button.active").value;
-console.log(type)
+console.log(symbol)
+let type;
+try{
+   type = document.querySelector(".option-button.active").value;
+}
+catch(error){
+searchInput.value = "";
+}
 
 if(symbol && type){
 changeActiveItem();
@@ -56,26 +62,17 @@ let oldPrice = output[openPrice[1]]["1. open"];
 
 createNewListElement(fetchedObj, fetchSymbol, currentPrice, oldPrice, fetchType);
 searchInput.value ="";
-symbol= "";
-type = "";
-// console.log("Then Block Running")
  })
  .catch((error) => {
-     symbol= "";
-     type = "";
      searchInput.value = "";
-     document.querySelector(".option-button.active").classList.remove("active");
      console.log("Catch Block Running");
-    // alert("Wrong Symbol Entered");
-  });
-}
-
-else{
-     symbol= "";
-     type = "";
      document.querySelector(".option-button.active").classList.remove("active");
-     searchInput.value = "";
-     console.log(searchInput.value);
+    
+});
+
+} 
+else{
+     document.querySelector(".option-button.active").classList.remove("active"); 
 }
 });
 
