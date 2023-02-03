@@ -94,10 +94,10 @@ async function fetchDetail(symbol, type) {
         fetchType
       );
       searchInput.value = "";
-      console.log("then Block Running");
+      // console.log("then Block Running");
     } catch (error) {
       searchInput.value = "";
-      console.log("Catch Block Running");
+      // console.log("Catch Block Running");
       document
         .querySelector(".option-button.active")
         .classList.remove("active");
