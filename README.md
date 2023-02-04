@@ -1,7 +1,7 @@
 # STOCK MARKET DASHBOARD
 
 - This UI is able to add the STOCK requested by the User to the Watchlist.
-- User has to enter vaid symbol's for different company. e.g MSFT, AMZN. SDS, IBM.
+- User has to enter valid symbol's for different company. e.g MSFT, AMZN. SDS, IBM.
 - Select one of the options from INTRADAY, DAILY, WEEKLY, MONTHLY.
 - Next Step Click on the Search Button.
 - This will call the API and add user Selected Stock to the Watchlist.
