@@ -1,8 +1,3 @@
-//  Load Event listener
-window.addEventListener("load", () => {
-  loadWatchlist();
-});
-
 //Storing all Element
 const mainContainer = document.getElementById("container");
 const searchInput = document.getElementById("search-input");
@@ -16,13 +11,18 @@ const listContainer = document.getElementById("watchlist-container");
 let closeButton = document.getElementById("close");
 let listItem;
 
-// My Map
+
 const myWatchlist = new Map();
 // localStorage.setItem("myList",myWatchlist);
 
 const arrayOfWatchlist = {
   key: new Map(),
 };
+
+//  Load Event listener
+window.addEventListener("load", () => {
+  loadWatchlist();
+});
 
 // Load watchlist on Page Reloading
 function loadWatchlist() {
@@ -39,34 +39,6 @@ function loadWatchlist() {
   }
 }
 
-// Litener for Active Button
-optionButton.forEach((item) => {
-  item.addEventListener("click", () => {
-    changeActiveItem();
-    item.classList.add("active");
-    // console.log(item.value);
-  });
-});
-
-const changeActiveItem = () => {
-  optionButton.forEach((item) => {
-    item.classList.remove("active");
-  });
-};
-
-// On Clicking Search Button Fetching Data from API
-searchButton.addEventListener("click", () => {
-  let symbol = searchInput.value.toUpperCase();
-  let type;
-  try {
-    type = document.querySelector(".option-button.active").value;
-  } catch (error) {
-    searchInput.value = "";
-  }
-  if (symbol && type) {
-    fetchDetail(symbol, type);
-  }
-});
 
 // Fetching data from API
 async function fetchDetail(symbol, type) {
@@ -77,6 +49,7 @@ async function fetchDetail(symbol, type) {
         `https://www.alphavantage.co/query?function=TIME_SERIES_${type}&symbol=${symbol}&interval=5min&apikey=3KSL9WN0OHTD9PZI`
       );
       let fetchedObj = await fetchData.json();
+      console.log(fetchedObj)
 
       let fetchSymbol = fetchedObj["Meta Data"]["2. Symbol"];
       let fetchType = fetchedObj["Meta Data"]["1. Information"].split(" ")[0];
@@ -94,10 +67,10 @@ async function fetchDetail(symbol, type) {
         fetchType
       );
       searchInput.value = "";
-      // console.log("then Block Running");
+      // console.log("then Block");
     } catch (error) {
       searchInput.value = "";
-      // console.log("Catch Block Running");
+      // console.log("Catch Block");
       document
         .querySelector(".option-button.active")
         .classList.remove("active");
@@ -107,7 +80,41 @@ async function fetchDetail(symbol, type) {
   }
 }
 
-// Function to Element add in watchlist
+// Removing active state from Options
+const changeActiveItem = () => {
+  optionButton.forEach((item) => {
+    item.classList.remove("active");
+  });
+};
+
+// Litener for Active Button
+optionButton.forEach((item) => {
+  item.addEventListener("click", () => {
+    changeActiveItem();
+    item.classList.add("active");
+    // console.log(item.value);
+  });
+});
+
+
+
+// On Clicking Search Button Fetching Data from API
+searchButton.addEventListener("click", () => {
+  let symbol = searchInput.value.toUpperCase();
+  let type;
+  try {
+    type = document.querySelector(".option-button.active").value;
+  } catch (error) {
+    searchInput.value = "";
+  }
+  if (symbol && type) {
+    fetchDetail(symbol, type);
+  }
+});
+
+
+
+// Function to add new Stock in watchlist
 function createNewListElement(
   fetchedObj,
   fetchSymbol,
@@ -115,6 +122,7 @@ function createNewListElement(
   oldPrice,
   fetchType
 ) {
+  // Check if the Stock is already present in the watchlist, should not allow to add again
   if (myWatchlist.has(`${fetchSymbol}-${fetchType}`)) {
     console.log("aleady present");
   } else {
@@ -126,6 +134,7 @@ function createNewListElement(
     listItem.setAttribute("onclick", "showDetails(this)");
     currentPrice = Number(currentPrice).toFixed(2);
 
+    // Every stock row has four li
     listItem.innerHTML = `<li id="symbol" class="${fetchSymbol}-${fetchType} symbol">${fetchSymbol}</li>
             <li  id="price" class="${fetchSymbol}-${fetchType} price">${currentPrice}</li>
             <li  id="information" class="${fetchSymbol}-${fetchType} time">${fetchType.toUpperCase()}</li>
@@ -152,6 +161,7 @@ function createNewListElement(
   }
 }
 
+
 // Fetching last 5 details
 function getLastFiveDetails(fetchedObj, fetchType) {
   let mainKeys = Object.keys(fetchedObj);
@@ -166,13 +176,14 @@ function getLastFiveDetails(fetchedObj, fetchType) {
       returnedMap.set(dayObject[i].split(" ")[0], output[dayObject[i]]);
     }
   }
+  // console.log(returnedMap)
   return returnedMap;
 }
 
 //  Delete Element from the Watchlist
 function closeElement(event) {
   event.stopPropagation();
-  let clickedElement = event.target.classList[0];
+  let clickedElement = event.target.classList[0];  //symbol-type
   let elementToBeRemoved = listContainer.querySelector(`.${clickedElement}`);
   let toBeRemoved = document.getElementById(elementToBeRemoved.classList[0]); // ul= watchlist item
   listContainer.removeChild(toBeRemoved);
@@ -181,9 +192,8 @@ function closeElement(event) {
   removeDetails(elementToBeRemoved);
 }
 
-// Remoing the Detaied Modal
+// Removing the Detaied Modal
 function removeDetails(event) {
-  // console.log(event)
   let itemID = event.id;
   let deleteElement = listContainer.querySelector(`.${itemID}-detail`);
   listContainer.removeChild(deleteElement);
