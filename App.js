@@ -71,9 +71,8 @@ async function fetchDetail(symbol, type) {
     } catch (error) {
       searchInput.value = "";
       // console.log("Catch Block");
-      document
-        .querySelector(".option-button.active")
-        .classList.remove("active");
+      let element = document.querySelector(".option-button.active")
+      element.classList.remove("active");
     }
   } else {
     document.querySelector(".option-button.active").classList.remove("active");
