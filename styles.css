@@ -29,7 +29,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #d0fff9;
+  background-image: url("bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #container {
